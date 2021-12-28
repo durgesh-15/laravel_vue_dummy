@@ -9,12 +9,17 @@ require('./bootstrap');
 window.Vue = require('vue');
 import moment from 'moment';
 
+//import store 
+import {store} from './store/store';
+
+//import form
 import { Form, HasError, AlertError } from 'vform';
 window.Form = Form;
 
 import Gate from "./Gate";
 Vue.prototype.$gate = new Gate(window.user);
 
+// import swal
 import Swal from 'sweetalert2';
 
 
@@ -101,6 +106,7 @@ Vue.filter('yesno', value => (value ? '<i class="fas fa-check green"></i>' : '<i
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
 const app = new Vue({
+    store: store, //Vuex
     el: '#app',
     router
 });
