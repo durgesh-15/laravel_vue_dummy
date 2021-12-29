@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import axios from 'axios';
 
 Vue.use(Vuex);
 
@@ -16,7 +17,8 @@ export const store = new Vuex.Store({
             { name: "Mobile", price: 10000},
             { name: "Tablet", price: 28000},
             { name: "Mac Book", price: 50000},
-        ]
+        ],
+        postData: { }
     },
     getters: {
         saleProducts: state => {
@@ -27,6 +29,28 @@ export const store = new Vuex.Store({
                 }
             });
             return saleProducts;
+        }
+    },
+    mutations: {
+        reducePrice: state => {
+            state.products.forEach(product => {
+                product.price =1;
+            });
+        },
+        updatePostData(state, payload){
+            state.postData = payload;
+        }
+    },
+    actions: {
+        async getPostApiCall({ commit}){
+            const response = await axios.get('https://jsonplaceholder.typicode.com/todos/1');
+            commit('updatePostData', response.data)
+        },
+        reducePrice: context=> {
+            setTimeout(function(){
+                context.commit('reducePrice')
+
+            },2000)
         }
     }
 })
