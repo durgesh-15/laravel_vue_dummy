@@ -31,7 +31,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                     <tr v-for="user in users.data" :key="user.id">
+                     <tr v-for="user in userList.data" :key="user.id">
 
                       <td>{{user.id}}</td>
                       <td class="text-capitalize">{{user.type}}</td>
@@ -141,8 +141,15 @@
                 })
             }
         },
+        computed: {
+            userList(){
+                return this.$store.state.userData;
+            }
+        },
         methods: {
-
+            getUserData(){
+                this.$store.dispatch('getAllUser');
+            },
             getResults(page = 1) {
 
                   this.$Progress.start();
@@ -248,9 +255,9 @@
             console.log('User Component mounted.')
         },
         created() {
-
             this.$Progress.start();
-            this.loadUsers();
+            this.getUserData();
+            // this.getResults();
             this.$Progress.finish();
         }
     }

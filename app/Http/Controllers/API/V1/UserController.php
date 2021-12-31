@@ -53,13 +53,11 @@ class UserController extends BaseController
      */
     public function store(Request $request)
     {
-        print_r($request->all());die;
         $insertPostData = [
             'name'          => $request->name,
             'email'         => $request->email,
             'password'      => Hash::make($request->password),
             'type'          => $request->type,
-            'profile_image' => $request->file,
         ];
 
         // if($request->hasFile('profile_image')) {
@@ -95,7 +93,7 @@ class UserController extends BaseController
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
-
+        
         if (!empty($request->password)) {
             $request->merge(['password' => Hash::make($request['password'])]);
         }
@@ -133,6 +131,5 @@ class UserController extends BaseController
             'data'    => $user,
             'message' => 'User has been Deleted'
         ]);
-        // return $this->sendResponse([$user], 'User has been Deleted');
     }
 }

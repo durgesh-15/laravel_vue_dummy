@@ -1,13 +1,15 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import axios from 'axios';
+import mutations from './mutations';
+import getters from './getters';
+import actions from './actions';
 
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
     state: {
         products: [
-            { name: "Banana Skin", price: 23},
+            { name: "Banana Skin", price: 24},
             { name: "shiny star", price: 25},
             { name: "Green shells", price: 30},
             { name: "Red shells", price: 50},
@@ -18,39 +20,43 @@ export const store = new Vuex.Store({
             { name: "Tablet", price: 28000},
             { name: "Mac Book", price: 50000},
         ],
-        postData: { }
+        postData: { },
+        userData: { }
     },
-    getters: {
-        saleProducts: state => {
-            var saleProducts = state.products.map(product => {
-                return {
-                    name: '**' + product.name + '**',
-                    price: product.price * 2 
-                }
-            });
-            return saleProducts;
-        }
-    },
-    mutations: {
-        reducePrice: state => {
-            state.products.forEach(product => {
-                product.price =1;
-            });
-        },
-        updatePostData(state, payload){
-            state.postData = payload;
-        }
-    },
-    actions: {
-        async getPostApiCall({ commit}){
-            const response = await axios.get('https://jsonplaceholder.typicode.com/todos/1');
-            commit('updatePostData', response.data)
-        },
-        reducePrice: context=> {
-            setTimeout(function(){
-                context.commit('reducePrice')
+    ...actions,
+    ...mutations,
+    ...getters
+    // getters: {
+    //     saleProducts: state => {
+    //         var saleProducts = state.products.map(product => {
+    //             return {
+    //                 name: '**' + product.name + '**',
+    //                 price: product.price * 2 
+    //             }
+    //         });
+    //         return saleProducts;
+    //     }
+    // },
+    // mutations: {
+    //     reducePrice: state => {
+    //         state.products.forEach(product => {
+    //             product.price =1;
+    //         });
+    //     },
+    //     updatePostData(state, payload){
+    //         state.postData = payload;
+    //     }
+    // },
+    // actions: {
+    //     async getPostApiCall({ commit }){
+    //         const response = await axios.get('https://jsonplaceholder.typicode.com/todos/1');
+    //         commit('updatePostData', response.data)
+    //     },
+    //     reducePrice: context=> {
+    //         setTimeout(function(){
+    //             context.commit('reducePrice')
 
-            },2000)
-        }
-    }
+    //         },2000)
+    //     }
+    // }
 })
