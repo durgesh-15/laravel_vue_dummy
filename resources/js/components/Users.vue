@@ -55,7 +55,7 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer">
-                  <pagination :data="users" @pagination-change-page="getResults"></pagination>
+                  <pagination :data="userList" @pagination-change-page="getResults"></pagination>
               </div>
             </div>
             <!-- /.card -->
@@ -80,7 +80,6 @@
                 </div>
 
                 <!-- <form @submit.prevent="createUser"> -->
-
                 <form enctype="multipart/form-data" @submit.prevent="editmode ? updateUser() : createUser()">
                     <div class="modal-body">
                         <div class="form-group">
@@ -130,7 +129,7 @@
         data () {
             return {
                 editmode: false,
-                users : {},
+                userList : {},
                 form: new Form({
                     id : '',
                     type : '',
@@ -147,31 +146,30 @@
             }
         },
         methods: {
-            getUserData(){
-                this.$store.dispatch('getAllUser');
-            },
+            // getUserData(){
+            //     this.$store.dispatch('getAllUser');
+            // },
             getResults(page = 1) {
 
                   this.$Progress.start();
                   
-                  axios.get('api/user?page=' + page).then(({ data }) => (this.users = data.data));
+                  axios.get('api/user?page=' + page).then(({ data }) => (this.userList = data.data));
 
                   this.$Progress.finish();
             },
             updateUser(){
                 this.$Progress.start();
-                // console.log('Editing data');
                 this.form.put('api/user/'+this.form.id)
                 .then((response) => {
                     // success
                     $('#addNew').modal('hide');
+
                     Toast.fire({
                       icon: 'success',
                       title: response.data.message
                     });
                     this.$Progress.finish();
-                        //  Fire.$emit('AfterCreate');
-
+                    // this.$router.push('api/users');
                     this.loadUsers();
                 })
                 .catch(() => {
@@ -190,7 +188,7 @@
                 this.form.reset();
                 $('#addNew').modal('show');
             },
-            deleteUser(id){
+            deleteUser(id){ 
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -220,7 +218,7 @@
             this.$Progress.start();
 
             if(this.$gate.isAdmin()){
-              axios.get("api/user").then(({ data }) => (this.users = data.data));
+              axios.get("api/user").then(({ data }) => (this.userList = data.data));
             }
 
             this.$Progress.finish();
@@ -252,12 +250,12 @@
 
         },
         mounted() {
-            console.log('User Component mounted.')
+            console.log('User Component mounted.');
         },
         created() {
             this.$Progress.start();
-            this.getUserData();
-            // this.getResults();
+            // this.getUserData();
+            this.loadUsers();
             this.$Progress.finish();
         }
     }
